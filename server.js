@@ -10,7 +10,7 @@ import config from './config/config.js'
 import errMsgs from './config/errors.js'
 import {publicRouter, privateRouter} from './config/routes.js'
 
-const app = new Koa()
+const app = module.exports = new Koa()
 app.context.conf = config
 
 /**
@@ -41,5 +41,7 @@ app.use((ctx) => {
 /**
  * Start server
  */
-const port = process.env.PORT || 3000
-app.listen(port, console.log(`listening on port ${port}`))
+if (!module.parent) {
+  const port = process.env.PORT || 3000
+  app.listen(port, console.log(`listening on port ${port}`))
+}
