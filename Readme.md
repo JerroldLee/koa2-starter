@@ -1,5 +1,8 @@
 # Koa2 Starter
 
+[![Build Status](https://travis-ci.org/hugocaillard/koa2-starter.svg?branch=master)](https://travis-ci.org/hugocaillard/koa2-starter)
+[![Dependency Status](https://img.shields.io/david/hugocaillard/koa2-starter.svg)](https://david-dm.org/hugocaillard/koa2-starter)
+
 Simple Koa 2 starter with fast runtime transformation.  
 Inspired from [CoralSH/server](https://github.com/CoralSH/server).
 
