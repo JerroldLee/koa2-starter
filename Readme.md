@@ -9,6 +9,8 @@ Also includes Koa-JWT and Koa-Router.
 
 Requires **node >= 4.0.0** and **npm >= 3.0.0** (although it should work with npm >= 2.0.0)
 
+[Learn more about Koa v2](https://github.com/koajs/koa/issues/533)
+
 *This repo is mainly for personal and example usage.*
 
 ## Usage
