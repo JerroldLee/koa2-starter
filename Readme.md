@@ -53,3 +53,8 @@ Then:
 **GET /api/private**
 
 For this example purpose, the token validity is 1 minute (see `./config/config.js`).
+
+
+## Todo
+
+- Maybe implement [boom](https://www.npmjs.com/package/boom)

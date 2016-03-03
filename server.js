@@ -1,47 +1,22 @@
 import Koa from 'koa'
-
 import logger from 'koa-logger'
-import convert from 'koa-convert'
 import compose from 'koa-compose'
 import bodyParser from 'koa-bodyparser'
-import jwt from 'koa-jwt'
 
-import config from './config/config.js'
-import errMsgs from './config/errors.js'
-import {publicRouter, privateRouter} from './config/routes.js'
+import db from './config/database'
+import config from './config/config'
+import routes from './config/routes'
 
 const app = module.exports = new Koa()
 app.context.conf = config
 
-/**
- * Middlewares
- */
 app.use(compose([bodyParser(), logger()]))
 
-/**
- * Routes
- */
-app.use(compose([publicRouter.routes(), publicRouter.allowedMethods()]))
+app.use(compose(routes))
 
-app.use(convert(jwt({
-  secret: 'shared-secret',
-  passthrough: true
-})))
-app.use(compose([privateRouter.routes(), privateRouter.allowedMethods()]))
-
-// Custom 404
-app.use((ctx) => {
-  if (ctx.status === 404) {
-    ctx.body = {
-      message: errMsgs[ctx.status]
-    }
+db.on('connected', () => {
+  if (!module.parent) {
+    const port = process.env.PORT || 3000
+    app.listen(port, console.log(`listening on port ${port}`))
   }
 })
-
-/**
- * Start server
- */
-if (!module.parent) {
-  const port = process.env.PORT || 3000
-  app.listen(port, console.log(`listening on port ${port}`))
-}

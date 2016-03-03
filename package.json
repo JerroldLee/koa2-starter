@@ -12,7 +12,8 @@
   "scripts": {
     "start": "scripts/start",
     "compile": "scripts/compile",
-    "test": "mocha --compilers js:babel-register"
+    "test": "mocha --compilers js:babel-register",
+    "testW": "mocha --compilers js:babel-register -w"
   },
   "engines": {
     "node": ">=4",
@@ -27,7 +28,8 @@
     "koa-convert": "^1.2.0",
     "koa-jwt": "^1.1.2",
     "koa-logger": "^2.0.0",
-    "koa-router": "^7.0.1"
+    "koa-router": "^7.0.1",
+    "mongoose": "^4.4.5"
   },
   "devDependencies": {
     "babel-cli": "^6.6.0",

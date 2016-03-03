@@ -1,20 +1,21 @@
 import jwt from 'koa-jwt'
+import convert from 'koa-convert'
 import router from 'koa-router'
 
-import errMsgs from './errors.js'
+import errMsgs from './errors'
 
 const opts = {prefix: '/api'}
 
-export const publicRouter = router(opts)
-export const privateRouter = router(opts)
+const publicRouter = router(opts)
+const privateRouter = router(opts)
 
-let data = {foo: 'bar'}
+const data = {foo: 'bar'}
 
-privateRouter.use((ctx, next) => {
+privateRouter.use(async (ctx, next) => {
   try {
-    let decoded = jwt.verify(ctx.headers.authorization, ctx.conf.jwt.key)
+    const decoded = jwt.verify(ctx.headers.authorization, ctx.conf.jwt.key)
     if (decoded.foo === data.foo) {
-      next()
+      await next()
     } else {
       ctx.throw(401)
     }
@@ -28,7 +29,7 @@ privateRouter.use((ctx, next) => {
 })
 
 publicRouter.get('/', (ctx) => {
-  let {key, expiresIn, alg} = ctx.conf.jwt
+  const {key, expiresIn, alg} = ctx.conf.jwt
 
   ctx.body = {
     message: 'Public API',
@@ -42,3 +43,25 @@ publicRouter.get('/', (ctx) => {
 privateRouter.get('/private', (ctx) => {
   ctx.body = {message: 'Private API'}
 })
+
+const setJWT = convert(jwt({
+  secret: 'shared-secret',
+  passthrough: true
+}))
+
+const custom404 = (ctx) => {
+  if (ctx.status === 404) {
+    ctx.body = {
+      message: errMsgs[ctx.status]
+    }
+  }
+}
+
+export default [
+  publicRouter.routes(),
+  publicRouter.allowedMethods(),
+  setJWT,
+  privateRouter.routes(),
+  privateRouter.allowedMethods(),
+  custom404
+]
